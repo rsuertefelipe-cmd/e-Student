@@ -1,5 +1,0 @@
-{
-  "buildCommand": "echo 'Build skipped'",
-  "outputDirectory": "frontend",
-  "framework": null
-}

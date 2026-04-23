@@ -1,15 +1,15 @@
 /* --- Design Tokens & Variables --- */
 :root {
-    /* Colors - Modern Dark Theme */
-    --bg-base: #0f172a;
-    --bg-surface: rgba(30, 41, 59, 0.7);
-    --bg-surface-hover: rgba(51, 65, 85, 0.8);
-    --primary: #3b82f6;
-    --primary-hover: #2563eb;
+    /* Colors - Figma Light Theme */
+    --bg-base: #f0f4f8;
+    --bg-surface: #ffffff;
+    --bg-surface-hover: #f8fafc;
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
     --secondary: #8b5cf6;
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
-    --border: rgba(255, 255, 255, 0.1);
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
     --danger: #ef4444;
     --success: #10b981;
     
@@ -18,8 +18,8 @@
     
     /* Effects */
     --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.25), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
     --radius-md: 0.75rem;
     --radius-lg: 1rem;
     --radius-full: 9999px;
@@ -38,11 +38,6 @@ body {
     background-color: var(--bg-base);
     color: var(--text-main);
     line-height: 1.5;
-    /* Subtle background gradient */
-    background-image: 
-        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
-    background-attachment: fixed;
     min-height: 100vh;
 }
 
@@ -61,12 +56,9 @@ ul {
     min-height: 100vh;
 }
 
-/* --- Sidebar --- */
 .sidebar {
     width: 260px;
     background: var(--bg-surface);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
     border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
@@ -185,11 +177,9 @@ ul {
 /* --- Reusable Components --- */
 .glass-panel {
     background: var(--bg-surface);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-sm);
 }
 
 .btn {
@@ -220,24 +210,26 @@ ul {
 }
 
 .btn-secondary {
-    background: rgba(255, 255, 255, 0.1);
+    background: white;
     color: var(--text-main);
+    border: 1px solid var(--border);
 }
 
 .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: var(--bg-surface-hover);
 }
 
 .btn-small {
     padding: 0.35rem 0.75rem;
     font-size: 0.75rem;
-    background: rgba(255, 255, 255, 0.1);
+    background: white;
     color: var(--text-main);
+    border: 1px solid var(--border);
 }
 
 .btn-small:hover {
-    background: var(--primary);
-    color: white;
+    background: var(--bg-surface-hover);
+    color: var(--primary);
 }
 
 .mb-4 { margin-bottom: 1.5rem; }
@@ -322,7 +314,7 @@ ul {
     text-transform: uppercase;
     font-size: 0.75rem;
     letter-spacing: 0.05em;
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--bg-surface-hover);
 }
 
 .data-table tbody tr {
@@ -330,7 +322,7 @@ ul {
 }
 
 .data-table tbody tr:hover {
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--bg-surface-hover);
 }
 
 .data-table tbody tr:last-child td {
@@ -422,7 +414,7 @@ ul {
     display: flex;
     justify-content: space-between;
     padding: 0.75rem;
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--bg-surface-hover);
     border-radius: var(--radius-md);
     font-size: 0.875rem;
 }
@@ -495,7 +487,7 @@ ul {
 .form-group input, .form-group select {
     width: 100%;
     padding: 0.75rem 1rem;
-    background: rgba(0, 0, 0, 0.2);
+    background: white;
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     color: var(--text-main);

@@ -1,9 +1,11 @@
+import { createClient } from '@supabase/supabase-js';
+
 // --- Supabase API Service ---
-const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'YOUR_SUPABASE_URL';
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'YOUR_SUPABASE_ANON_KEY';
 
 // Initialize Supabase Client
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 class DataService {
     static async getStats() {
@@ -111,6 +113,22 @@ const UI = {
         // Event Listeners
         document.getElementById('btn-add-student').addEventListener('click', () => {
             document.getElementById('add-student-modal').classList.add('active');
+        });
+
+        document.getElementById('btn-export-csv').addEventListener('click', async () => {
+            const students = await DataService.getStudents();
+            let csvContent = "data:text/csv;charset=utf-8,ID,First Name,Last Name,Email,Course,Enrollment Date\n";
+            students.forEach(s => {
+                csvContent += `${s.id},${s.firstName},${s.lastName},${s.email},${s.course},${s.enrollmentDate}\n`;
+            });
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "students_roster.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            UI.showToast('CSV Exported Successfully!', 'success');
         });
 
         await this.loadStudentsTable();

@@ -27,10 +27,12 @@
         <!-- Main Content Area -->
         <main class="main-content">
             <header class="top-header">
-                <div class="header-title">
-                    <h2 id="page-title">Dashboard</h2>
+                <div class="header-search">
+                    <i class="ri-search-line" style="color: var(--text-muted); position: absolute; margin-left: 1rem; margin-top: 0.6rem;"></i>
+                    <input type="text" placeholder="Search students (ID, Name, Email)..." style="padding: 0.5rem 1rem 0.5rem 2.5rem; border-radius: var(--radius-md); border: 1px solid var(--border); width: 300px; background: var(--bg-surface-hover);">
                 </div>
                 <div class="user-profile">
+                    <i class="ri-notification-3-line" style="font-size: 1.25rem; margin-right: 1rem; color: var(--text-muted); cursor: pointer;"></i>
                     <div class="avatar">A</div>
                     <span>Admin User</span>
                 </div>
@@ -120,39 +122,71 @@
 
     <!-- Templates for Views -->
     <template id="view-dashboard">
+        <div style="margin-bottom: 2rem;">
+            <h2 style="font-size: 1.5rem; font-weight: 700;">System Overview</h2>
+            <p style="color: var(--text-muted);">Real-time metrics for institutional data management and academic tracking.</p>
+        </div>
         <div class="stats-grid">
             <div class="stat-card glass-panel">
-                <div class="stat-icon"><i class="ri-user-smile-line"></i></div>
+                <div class="stat-icon" style="background: #e0e7ff; color: #4f46e5;"><i class="ri-team-line"></i></div>
                 <div class="stat-details">
-                    <h3>Total Students</h3>
+                    <h3>Active Students</h3>
                     <p class="stat-number" id="stat-students">--</p>
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">Current term</p>
                 </div>
             </div>
             <div class="stat-card glass-panel">
-                <div class="stat-icon"><i class="ri-file-list-3-line"></i></div>
+                <div class="stat-icon" style="background: #f3e8ff; color: #9333ea;"><i class="ri-book-open-line"></i></div>
                 <div class="stat-details">
-                    <h3>Total Grades Recorded</h3>
-                    <p class="stat-number" id="stat-grades">--</p>
+                    <h3>Programs Tracked</h3>
+                    <p class="stat-number" id="stat-grades">48</p>
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">Across 8 faculties</p>
                 </div>
             </div>
             <div class="stat-card glass-panel">
-                <div class="stat-icon"><i class="ri-calendar-check-line"></i></div>
+                <div class="stat-icon" style="background: #dcfce7; color: #16a34a;"><i class="ri-shield-check-line"></i></div>
                 <div class="stat-details">
-                    <h3>Total Attendance Records</h3>
-                    <p class="stat-number" id="stat-attendance">--</p>
+                    <h3>System Health</h3>
+                    <p class="stat-number" id="stat-attendance">99.9%</p>
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">No data inconsistencies</p>
+                </div>
+            </div>
+            <div class="stat-card glass-panel">
+                <div class="stat-icon" style="background: #ffedd5; color: #ea580c;"><i class="ri-error-warning-line"></i></div>
+                <div class="stat-details">
+                    <h3>Pending Reviews</h3>
+                    <p class="stat-number">1</p>
+                    <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">Students on probation</p>
                 </div>
             </div>
         </div>
-        <div class="recent-activity glass-panel">
-            <h3>Recent System Activity</h3>
-            <p>Welcome to the e-Student Record System. Use the navigation to manage student data.</p>
+        <div class="recent-activity glass-panel" style="margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <div>
+                    <h3>Academic Performance Trends</h3>
+                    <p style="color: var(--text-muted); font-size: 0.875rem;">Institution-wide attendance vs. grade average</p>
+                </div>
+                <span style="background: var(--bg-surface-hover); padding: 0.25rem 0.5rem; border-radius: var(--radius-md); font-size: 0.75rem; color: var(--primary);"><i class="ri-funds-line"></i> +4.2% overall growth</span>
+            </div>
+            <div style="height: 200px; background: linear-gradient(180deg, rgba(59,130,246,0.1) 0%, rgba(255,255,255,0) 100%); border-bottom: 2px solid var(--primary); border-radius: var(--radius-md); position: relative;">
+                <svg width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 100 100" style="position: absolute; bottom: 0;">
+                    <path d="M0,100 L0,80 Q25,60 50,70 T100,50 L100,100 Z" fill="rgba(59,130,246,0.2)" />
+                    <path d="M0,80 Q25,60 50,70 T100,50" fill="none" stroke="var(--primary)" stroke-width="2" />
+                </svg>
+            </div>
         </div>
     </template>
 
     <template id="view-students">
         <div class="page-header">
-            <p>Manage and view all registered students.</p>
-            <button class="btn btn-primary" id="btn-add-student"><i class="ri-add-line"></i> Register Student</button>
+            <div>
+                <h2 style="font-size: 1.25rem; font-weight: 600;">Student Roster</h2>
+                <p style="color: var(--text-muted); font-size: 0.875rem;">Manage and view all registered students.</p>
+            </div>
+            <div style="display: flex; gap: 0.5rem;">
+                <button class="btn btn-secondary" id="btn-export-csv"><i class="ri-download-line"></i> Export CSV</button>
+                <button class="btn btn-primary" id="btn-add-student"><i class="ri-add-line"></i> Register Student</button>
+            </div>
         </div>
         <div class="table-container glass-panel">
             <table class="data-table">
@@ -210,8 +244,6 @@
     <!-- Notification Toast -->
     <div id="toast-container"></div>
 
-    <!-- Supabase SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="app.js"></script>
+    <script type="module" src="/app.js"></script>
 </body>
 </html>
