@@ -1,137 +1,73 @@
-// --- API Service (with LocalStorage fallback) ---
-const API_URL = 'http://localhost:5000/api';
+// --- Supabase API Service ---
+const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+
+// Initialize Supabase Client
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 class DataService {
     static async getStats() {
-        try {
-            const res = await fetch(`${API_URL}/stats`);
-            if (!res.ok) throw new Error('API down');
-            return await res.json();
-        } catch (error) {
-            // Fallback to local storage
-            const students = JSON.parse(localStorage.getItem('students') || '[]');
-            const grades = JSON.parse(localStorage.getItem('grades') || '[]');
-            const attendance = JSON.parse(localStorage.getItem('attendance') || '[]');
-            return {
-                totalStudents: students.length,
-                totalGrades: grades.length,
-                totalAttendance: attendance.length
-            };
-        }
+        const { count: totalStudents } = await supabase.from('students').select('*', { count: 'exact', head: true });
+        const { count: totalGrades } = await supabase.from('grades').select('*', { count: 'exact', head: true });
+        const { count: totalAttendance } = await supabase.from('attendance').select('*', { count: 'exact', head: true });
+        
+        return {
+            totalStudents: totalStudents || 0,
+            totalGrades: totalGrades || 0,
+            totalAttendance: totalAttendance || 0
+        };
     }
 
     static async getStudents() {
-        try {
-            const res = await fetch(`${API_URL}/students`);
-            if (!res.ok) throw new Error('API down');
-            return await res.json();
-        } catch (error) {
-            return JSON.parse(localStorage.getItem('students') || '[]');
-        }
+        const { data, error } = await supabase.from('students').select('*').order('id', { ascending: false });
+        if (error) { console.error(error); return []; }
+        return data;
     }
 
     static async addStudent(student) {
-        try {
-            const res = await fetch(`${API_URL}/students`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(student)
-            });
-            if (!res.ok) throw new Error('API down');
-            return await res.json();
-        } catch (error) {
-            const students = JSON.parse(localStorage.getItem('students') || '[]');
-            const newStudent = { 
-                ...student, 
-                id: Date.now(), 
-                enrollmentDate: new Date().toISOString().split('T')[0] 
-            };
-            students.push(newStudent);
-            localStorage.setItem('students', JSON.stringify(students));
-            return newStudent;
-        }
+        const enrollmentDate = new Date().toISOString().split('T')[0];
+        const newStudent = { ...student, enrollmentDate };
+        const { data, error } = await supabase.from('students').insert([newStudent]).select().single();
+        if (error) { console.error(error); throw error; }
+        return data;
     }
 
     static async deleteStudent(id) {
-        try {
-            const res = await fetch(`${API_URL}/students/${id}`, { method: 'DELETE' });
-            if (!res.ok) throw new Error('API down');
-            return await res.json();
-        } catch (error) {
-            let students = JSON.parse(localStorage.getItem('students') || '[]');
-            students = students.filter(s => s.id !== id);
-            localStorage.setItem('students', JSON.stringify(students));
-            return { deleted: 1 };
-        }
+        const { error } = await supabase.from('students').delete().eq('id', id);
+        if (error) { console.error(error); throw error; }
+        return { deleted: 1 };
     }
 
     static async getStudent(id) {
-        try {
-            const res = await fetch(`${API_URL}/students/${id}`);
-            if (!res.ok) throw new Error('API down');
-            return await res.json();
-        } catch (error) {
-            const students = JSON.parse(localStorage.getItem('students') || '[]');
-            return students.find(s => s.id === id);
-        }
+        const { data, error } = await supabase.from('students').select('*').eq('id', id).single();
+        if (error) { console.error(error); return null; }
+        return data;
     }
 
     static async getGrades(studentId) {
-        try {
-            const res = await fetch(`${API_URL}/students/${studentId}/grades`);
-            if (!res.ok) throw new Error('API down');
-            return await res.json();
-        } catch (error) {
-            const grades = JSON.parse(localStorage.getItem('grades') || '[]');
-            return grades.filter(g => g.studentId === studentId);
-        }
+        const { data, error } = await supabase.from('grades').select('*').eq('studentId', studentId).order('id', { ascending: false });
+        if (error) { console.error(error); return []; }
+        return data;
     }
 
     static async getAttendance(studentId) {
-        try {
-            const res = await fetch(`${API_URL}/students/${studentId}/attendance`);
-            if (!res.ok) throw new Error('API down');
-            return await res.json();
-        } catch (error) {
-            const attendance = JSON.parse(localStorage.getItem('attendance') || '[]');
-            return attendance.filter(a => a.studentId === studentId);
-        }
+        const { data, error } = await supabase.from('attendance').select('*').eq('studentId', studentId).order('date', { ascending: false });
+        if (error) { console.error(error); return []; }
+        return data;
     }
 
     static async addGrade(studentId, gradeData) {
-        try {
-            const res = await fetch(`${API_URL}/students/${studentId}/grades`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(gradeData)
-            });
-            if (!res.ok) throw new Error('API down');
-            return await res.json();
-        } catch (error) {
-            const grades = JSON.parse(localStorage.getItem('grades') || '[]');
-            const newGrade = { ...gradeData, id: Date.now(), studentId: parseInt(studentId) };
-            grades.push(newGrade);
-            localStorage.setItem('grades', JSON.stringify(grades));
-            return newGrade;
-        }
+        const newGrade = { ...gradeData, studentId: parseInt(studentId) };
+        const { data, error } = await supabase.from('grades').insert([newGrade]).select().single();
+        if (error) { console.error(error); throw error; }
+        return data;
     }
 
     static async addAttendance(studentId, attendanceData) {
-        try {
-            const res = await fetch(`${API_URL}/students/${studentId}/attendance`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(attendanceData)
-            });
-            if (!res.ok) throw new Error('API down');
-            return await res.json();
-        } catch (error) {
-            const attendance = JSON.parse(localStorage.getItem('attendance') || '[]');
-            const newAttendance = { ...attendanceData, id: Date.now(), studentId: parseInt(studentId) };
-            attendance.push(newAttendance);
-            localStorage.setItem('attendance', JSON.stringify(attendance));
-            return newAttendance;
-        }
+        const newAttendance = { ...attendanceData, studentId: parseInt(studentId) };
+        const { data, error } = await supabase.from('attendance').insert([newAttendance]).select().single();
+        if (error) { console.error(error); throw error; }
+        return data;
     }
 }
 
