@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>e-Student Record System</title>
+    <!-- Modern Typography: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon"><i class="ri-graduation-cap-fill"></i></div>
+                <h1 class="logo-text">e-Student</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" data-view="dashboard" class="nav-item active"><i class="ri-dashboard-line"></i> Dashboard</a></li>
+                <li><a href="#" data-view="students" class="nav-item"><i class="ri-group-line"></i> Students</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="top-header">
+                <div class="header-title">
+                    <h2 id="page-title">Dashboard</h2>
+                </div>
+                <div class="user-profile">
+                    <div class="avatar">A</div>
+                    <span>Admin User</span>
+                </div>
+            </header>
+
+            <div class="content-wrapper" id="content-area">
+                <!-- Views will be injected here via JavaScript -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="add-student-modal" class="modal">
+        <div class="modal-content glass-panel">
+            <span class="close-modal">&times;</span>
+            <h2>Register New Student</h2>
+            <form id="add-student-form">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="course">Course/Program</label>
+                    <input type="text" id="course" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Register Student</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Templates for Views -->
+    <template id="view-dashboard">
+        <div class="stats-grid">
+            <div class="stat-card glass-panel">
+                <div class="stat-icon"><i class="ri-user-smile-line"></i></div>
+                <div class="stat-details">
+                    <h3>Total Students</h3>
+                    <p class="stat-number" id="stat-students">--</p>
+                </div>
+            </div>
+            <div class="stat-card glass-panel">
+                <div class="stat-icon"><i class="ri-file-list-3-line"></i></div>
+                <div class="stat-details">
+                    <h3>Total Grades Recorded</h3>
+                    <p class="stat-number" id="stat-grades">--</p>
+                </div>
+            </div>
+            <div class="stat-card glass-panel">
+                <div class="stat-icon"><i class="ri-calendar-check-line"></i></div>
+                <div class="stat-details">
+                    <h3>Total Attendance Records</h3>
+                    <p class="stat-number" id="stat-attendance">--</p>
+                </div>
+            </div>
+        </div>
+        <div class="recent-activity glass-panel">
+            <h3>Recent System Activity</h3>
+            <p>Welcome to the e-Student Record System. Use the navigation to manage student data.</p>
+        </div>
+    </template>
+
+    <template id="view-students">
+        <div class="page-header">
+            <p>Manage and view all registered students.</p>
+            <button class="btn btn-primary" id="btn-add-student"><i class="ri-add-line"></i> Register Student</button>
+        </div>
+        <div class="table-container glass-panel">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Course</th>
+                        <th>Enrollment Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="students-table-body">
+                    <!-- Data populated via JS -->
+                </tbody>
+            </table>
+        </div>
+    </template>
+
+    <template id="view-student-detail">
+        <button class="btn btn-secondary mb-4" id="btn-back"><i class="ri-arrow-left-line"></i> Back to Students</button>
+        <div class="student-profile-header glass-panel mb-4">
+            <div class="profile-avatar"><i class="ri-user-fill"></i></div>
+            <div class="profile-info">
+                <h2 id="detail-name">Student Name</h2>
+                <p><i class="ri-mail-line"></i> <span id="detail-email">email@example.com</span></p>
+                <p><i class="ri-book-read-line"></i> <span id="detail-course">Course Name</span></p>
+            </div>
+        </div>
+        
+        <div class="details-grid">
+            <div class="detail-section glass-panel">
+                <div class="section-header">
+                    <h3>Grades</h3>
+                    <button class="btn btn-small" id="btn-add-grade">Add</button>
+                </div>
+                <ul class="record-list" id="grades-list">
+                    <!-- Populated via JS -->
+                </ul>
+            </div>
+            <div class="detail-section glass-panel">
+                <div class="section-header">
+                    <h3>Attendance</h3>
+                    <button class="btn btn-small" id="btn-add-attendance">Add</button>
+                </div>
+                <ul class="record-list" id="attendance-list">
+                    <!-- Populated via JS -->
+                </ul>
+            </div>
+        </div>
+    </template>
+
+    <!-- Notification Toast -->
+    <div id="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
