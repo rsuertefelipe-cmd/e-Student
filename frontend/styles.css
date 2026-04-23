@@ -551,3 +551,13 @@ ul {
     .nav-item { justify-content: center; }
     .details-grid { grid-template-columns: 1fr; }
 }
+
+/* --- Print Styles --- */
+@media print {
+    .sidebar, .top-header, .mb-4, .btn, .modal, #toast-container { display: none !important; }
+    .main-content { flex: 1; padding: 0; }
+    .content-wrapper { padding: 0; animation: none; }
+    body { background: white; color: black; }
+    .glass-panel { background: none; border: none; box-shadow: none; backdrop-filter: none; }
+    .student-profile-header, .detail-section { border: 1px solid #ddd; page-break-inside: avoid; }
+}

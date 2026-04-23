@@ -69,6 +69,55 @@
         </div>
     </div>
 
+    <!-- Add Grade Modal -->
+    <div id="add-grade-modal" class="modal">
+        <div class="modal-content glass-panel">
+            <span class="close-modal">&times;</span>
+            <h2>Record Grade</h2>
+            <form id="add-grade-form">
+                <input type="hidden" id="grade-student-id">
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <input type="text" id="subject" required>
+                </div>
+                <div class="form-group">
+                    <label for="grade">Grade</label>
+                    <input type="text" id="grade" required>
+                </div>
+                <div class="form-group">
+                    <label for="semester">Semester</label>
+                    <input type="text" id="semester" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Grade</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Attendance Modal -->
+    <div id="add-attendance-modal" class="modal">
+        <div class="modal-content glass-panel">
+            <span class="close-modal">&times;</span>
+            <h2>Record Attendance</h2>
+            <form id="add-attendance-form">
+                <input type="hidden" id="attendance-student-id">
+                <div class="form-group">
+                    <label for="date">Date</label>
+                    <input type="date" id="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="status">Status</label>
+                    <select id="status" required>
+                        <option value="Present">Present</option>
+                        <option value="Absent">Absent</option>
+                        <option value="Late">Late</option>
+                        <option value="Excused">Excused</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Save Attendance</button>
+            </form>
+        </div>
+    </div>
+
     <!-- Templates for Views -->
     <template id="view-dashboard">
         <div class="stats-grid">
@@ -132,6 +181,7 @@
                 <h2 id="detail-name">Student Name</h2>
                 <p><i class="ri-mail-line"></i> <span id="detail-email">email@example.com</span></p>
                 <p><i class="ri-book-read-line"></i> <span id="detail-course">Course Name</span></p>
+                <button class="btn btn-small" id="btn-print-report" style="margin-top:0.5rem;"><i class="ri-printer-line"></i> Generate Report</button>
             </div>
         </div>
         

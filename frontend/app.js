@@ -97,6 +97,42 @@ class DataService {
             return attendance.filter(a => a.studentId === studentId);
         }
     }
+
+    static async addGrade(studentId, gradeData) {
+        try {
+            const res = await fetch(`${API_URL}/students/${studentId}/grades`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(gradeData)
+            });
+            if (!res.ok) throw new Error('API down');
+            return await res.json();
+        } catch (error) {
+            const grades = JSON.parse(localStorage.getItem('grades') || '[]');
+            const newGrade = { ...gradeData, id: Date.now(), studentId: parseInt(studentId) };
+            grades.push(newGrade);
+            localStorage.setItem('grades', JSON.stringify(grades));
+            return newGrade;
+        }
+    }
+
+    static async addAttendance(studentId, attendanceData) {
+        try {
+            const res = await fetch(`${API_URL}/students/${studentId}/attendance`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(attendanceData)
+            });
+            if (!res.ok) throw new Error('API down');
+            return await res.json();
+        } catch (error) {
+            const attendance = JSON.parse(localStorage.getItem('attendance') || '[]');
+            const newAttendance = { ...attendanceData, id: Date.now(), studentId: parseInt(studentId) };
+            attendance.push(newAttendance);
+            localStorage.setItem('attendance', JSON.stringify(attendance));
+            return newAttendance;
+        }
+    }
 }
 
 // --- UI Manager ---
@@ -180,6 +216,17 @@ const UI = {
         document.getElementById('detail-course').textContent = student.course;
 
         document.getElementById('btn-back').addEventListener('click', () => app.navigate('students'));
+        document.getElementById('btn-print-report').addEventListener('click', () => window.print());
+
+        document.getElementById('btn-add-grade').addEventListener('click', () => {
+            document.getElementById('grade-student-id').value = id;
+            document.getElementById('add-grade-modal').classList.add('active');
+        });
+
+        document.getElementById('btn-add-attendance').addEventListener('click', () => {
+            document.getElementById('attendance-student-id').value = id;
+            document.getElementById('add-attendance-modal').classList.add('active');
+        });
 
         // Load records
         const grades = await DataService.getGrades(id);
@@ -206,8 +253,10 @@ const app = {
         this.navigate('dashboard');
         
         // Setup modal close
-        document.querySelector('.close-modal').addEventListener('click', () => {
-            document.getElementById('add-student-modal').classList.remove('active');
+        document.querySelectorAll('.close-modal').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.target.closest('.modal').classList.remove('active');
+            });
         });
     },
 
@@ -240,6 +289,35 @@ const app = {
             if(document.getElementById('students-table-body')) {
                 UI.loadStudentsTable();
             }
+        });
+
+        document.getElementById('add-grade-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const studentId = document.getElementById('grade-student-id').value;
+            const gradeData = {
+                subject: document.getElementById('subject').value,
+                grade: document.getElementById('grade').value,
+                semester: document.getElementById('semester').value
+            };
+            await DataService.addGrade(studentId, gradeData);
+            document.getElementById('add-grade-form').reset();
+            document.getElementById('add-grade-modal').classList.remove('active');
+            UI.showToast('Grade recorded successfully!');
+            UI.renderStudentDetail(parseInt(studentId));
+        });
+
+        document.getElementById('add-attendance-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const studentId = document.getElementById('attendance-student-id').value;
+            const attendanceData = {
+                date: document.getElementById('date').value,
+                status: document.getElementById('status').value
+            };
+            await DataService.addAttendance(studentId, attendanceData);
+            document.getElementById('add-attendance-form').reset();
+            document.getElementById('add-attendance-modal').classList.remove('active');
+            UI.showToast('Attendance recorded successfully!');
+            UI.renderStudentDetail(parseInt(studentId));
         });
     },
 
